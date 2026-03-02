@@ -1,35 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./index.css"
 
-function App() {
-  const [count, setCount] = useState(0)
+type Portal = "master" | "slave"
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+function getPortal(): Portal {
+  const raw = (import.meta.env.VITE_PORTAL || "slave").toString().toLowerCase()
+  return raw === "master" ? "master" : "slave"
 }
 
-export default App
+export default function App() {
+  const portal = getPortal()
+
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+      <div style={{ maxWidth: 720, width: "100%" }}>
+        <h1 style={{ fontSize: 34, margin: 0 }}>Voodoo Nexus Portal</h1>
+        <p style={{ marginTop: 8, opacity: 0.8 }}>Build status: OK</p>
+
+        <div style={{ marginTop: 18, padding: 16, borderRadius: 12, border: "1px solid rgba(255,255,255,0.12)" }}>
+          <div style={{ fontSize: 14, opacity: 0.8 }}>Current portal</div>
+          <div style={{ fontSize: 22, fontWeight: 700 }}>
+            {portal === "master" ? "mast" : "app"}
+          </div>
+          <div style={{ marginTop: 10, fontSize: 13, opacity: 0.7 }}>
+            Env flag: VITE_PORTAL = "{portal}"
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
